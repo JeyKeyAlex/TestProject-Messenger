@@ -13,4 +13,13 @@ func main() {
 	apiLogger, netLogger, coreLogger, loggerCloser := logger.ApiNetCoreCloserLoggers(appConfig)
 	defer logger.CloseLogger(loggerCloser)
 
+	//testProjectConn, err := initGRPCClientConnection(appConfig)
+	//if err != nil {
+	//	panic(err)
+	//}
+
+	listenErr := make(chan error, 1)
+
+	grpcServer, grpcListener := initKitGRPC(appConfig, netLogger, listenErr)
+
 }
