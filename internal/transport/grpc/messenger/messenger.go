@@ -2,10 +2,15 @@ package messenger
 
 import (
 	"context"
+	"errors"
+	"fmt"
+
 	"github.com/JeyKeyAlex/TestProject-Messenger/internal/transport/grpc/common"
-	pb "github.com/JeyKeyAlex/TestProject-genproto/messenger"
+
 	"github.com/go-kit/kit/endpoint"
 	kitgrpc "github.com/go-kit/kit/transport/grpc"
+
+	pb "github.com/JeyKeyAlex/TestProject-genproto/messenger"
 )
 
 type RPCServer struct {
@@ -23,16 +28,16 @@ func NewServer() pb.MessengerServiceServer {
 
 func makeCreate() endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		//reqID, ctx := middleware.GetRequestID(ctx)
-		//serviceLogger := s.GetLogger().With().Str("func", "makeCreate").Str("request_id", reqID).Logger()
-		//serviceLogger.Info().Msg("calling s.createUser")
-		//
-		//req, err := validate.CastValidateRequest[*pb.CreateUserRequest](s.GetValidator(), request)
-		//if err != nil {
-		//	serviceLogger.Error().Stack().Err(error_templates.ErrorDetailFromError(err)).Msg(pkgErr.FailedCastRequest)
-		//	return nil, err
-		//}
+		req, ok := request.(*pb.CreateMessageRequest)
+		if !ok {
+			err := errors.New("invalid request fields")
+			return nil, err
+		}
 
-		return &pb.CreateMessageResponse{}, nil
+		resp := fmt.Sprintf("%s, you are observed", req.Email)
+
+		return &pb.CreateMessageResponse{
+			Message: resp,
+		}, nil
 	}
 }

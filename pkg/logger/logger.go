@@ -44,14 +44,12 @@ func (mwc *myWriteCloser) Close() error {
 	return nil
 }
 
-func ApiNetCoreCloserLoggers(cfg *config.Configuration) (zerolog.Logger, zerolog.Logger, zerolog.Logger, io.WriteCloser) {
+func CoreCloserLoggers(cfg *config.Configuration) (zerolog.Logger, io.WriteCloser) {
 	baseLog, logCloser := baseLogger(cfg)
 
-	apiLogger := newComponentLogger(baseLog, "api")
-	netLogger := newComponentLogger(baseLog, "net")
 	coreLogger := newComponentLogger(baseLog, "core")
 
-	return apiLogger, netLogger, coreLogger, logCloser
+	return coreLogger, logCloser
 }
 
 // CloseLogger не возвращает ошибку потому что она не обрабатывается и функция вызывается при остановке программы

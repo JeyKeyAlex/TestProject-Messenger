@@ -67,7 +67,7 @@ type (
 		IdleTimeout                time.Duration `env:"IDLE_TIMEOUT,default=30s"`
 		MaxRequestBodySize         int           `env:"MAX_REQUEST_BODY_SIZE,default=33554432"`
 		Network                    string        `env:"NETWORK,default=tcp"`
-		Address                    string        `env:"ADDRESS,default=:18080"`
+		Address                    string        `env:"ADDRESS,default=:18081"`
 	}
 
 	ClientsGRPC struct {

@@ -1,32 +1,18 @@
 package main
 
 import (
+	"net"
+	"time"
+
 	"github.com/JeyKeyAlex/TestProject-Messenger/internal/config"
 	tpGRPC "github.com/JeyKeyAlex/TestProject-Messenger/internal/transport/grpc"
 	tpGRPCMessenger "github.com/JeyKeyAlex/TestProject-Messenger/internal/transport/grpc/messenger"
+
 	"github.com/rs/zerolog"
 	googlegrpc "google.golang.org/grpc"
-	"net"
-	"time"
+
+	pb "github.com/JeyKeyAlex/TestProject-genproto/messenger"
 )
-
-func initGRPCClientConnection(appConfig *config.Configuration) (*googlegrpc.ClientConn, error) {
-	clientInfo := appConfig.ClientsGRPC.TestProject
-	timeout := googlegrpc.WithIdleTimeout(clientInfo.IdleTimeout)
-
-	dialOptions := []googlegrpc.DialOption{
-		timeout,
-	}
-
-	conn, err := googlegrpc.NewClient(
-		clientInfo.GetFullAddress(),
-		dialOptions...)
-	if err != nil {
-		return nil, err
-	}
-
-	return conn, nil
-}
 
 func initKitGRPC(appConfig *config.Configuration, netLogger zerolog.Logger, listenErr chan error) (*googlegrpc.Server, net.Listener) {
 
@@ -37,7 +23,7 @@ func initKitGRPC(appConfig *config.Configuration, netLogger zerolog.Logger, list
 		googlegrpc.MaxSendMsgSize(appConfig.GRPC.MaxRequestBodySize),
 	)
 
-	pbUser.RegisterUserServer(grpcServer, grpcUserServer)
+	pb.RegisterMessengerServiceServer(grpcServer, grpcUserServer)
 
 	l, err := net.Listen(appConfig.GRPC.Network, appConfig.GRPC.Address)
 	if err != nil {

@@ -2,6 +2,7 @@ package messenger
 
 import (
 	"context"
+
 	pb "github.com/JeyKeyAlex/TestProject-genproto/messenger"
 )
 
